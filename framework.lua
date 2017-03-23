@@ -1,3 +1,74 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--[[
+	
+	terminal_ core framework
+	contributors: hexadecival
+	creation date: 3/23/2017
+	
+	note to self: die for writing horrible code
+	note to self: rewrite everything
+	
+
+	
+	CTRL+F Shortcuts:
+	
+		@Creation
+		@Ip
+		@Button
+		@Web
+		@Analysis
+		@Console
+		@Misc
+		@Firm
+		@File
+		@Brute
+		@Net
+		@Command
+		@Chat
+		@Music
+		@Console
+		@Loop
+	
+--]]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 repeat wait() until game.Players.LocalPlayer:FindFirstChild("GameData")
 
 --dirs
@@ -22,12 +93,6 @@ starterGui:SetCore("TopbarEnabled", false)
 
 
 
---[[
-	
-	@Chat
-	@Music
-	
---]]
 
 
 
@@ -45,15 +110,7 @@ starterGui:SetCore("TopbarEnabled", false)
 
 
 
-
-
-
-
-
-
-
-
-
+--@Creation
 --create pc
 do
 	mypc = game.ReplicatedStorage.data.pc:Clone()
@@ -89,6 +146,9 @@ end
 
 
 
+
+
+--@Ip
 function iplist()
 	root.terminal.map.list:ClearAllChildren()
 	local ii = 0
@@ -126,6 +186,8 @@ end
 
 
 
+
+--@Button
 --buttons
 for index, button in pairs (root.terminal.buttons:GetChildren()) do
 	button.MouseButton1Down:Connect(function()
@@ -154,6 +216,11 @@ end
 
 
 
+
+
+
+
+--@Web
 --update website
 local buttons = root.terminal.buttons
 function update_website()
@@ -202,12 +269,13 @@ end
 
 
 
+--@Analysis
 --update analysis
 function update_analysis()
-	local anal = root.terminal.analysis --dat variabl name tho
-	anal.firewall.Visible = cur_ip:FindFirstChild("firewall")
-	anal.right.Text = "Your rights on the server : "..(isadmin() and "admin" or "guest")
-	anal.text.Text = cur_ip.Name .. " - Network Analysis"
+	local analysis = root.terminal.analysis --dat variabl name tho
+	analysis.firewall.Visible = cur_ip:FindFirstChild("firewall")
+	analysis.right.Text = "Your rights on the server : "..(isadmin() and "admin" or "guest")
+	analysis.text.Text = cur_ip.Name .. " - Network Analysis"
 end
 
 
@@ -228,6 +296,8 @@ end
 
 
 
+
+--@Console
 local console = {
 	text={}
 }
@@ -260,6 +330,13 @@ end
 
 
 
+
+
+
+
+
+
+--@Misc
 --data types
 function getdatatype(obj)
 	if obj:IsA("StringValue") then
@@ -299,10 +376,7 @@ end
 
 
 
-
-
-
-
+--@Firm
 --firmware framework
 local fware = {}
 do
@@ -396,16 +470,7 @@ fware.boot(true)
 
 
 
-
-
-
-
-
-
-
-
-
-
+--@File
 --filesystem
 local fsys = {}
 do
@@ -539,13 +604,7 @@ end
 
 
 
-
-
-
-
-
-
-
+--@Brute
 --brute force
 local bforce={}
 do
@@ -615,14 +674,7 @@ end
 
 
 
-
-
-
-
-
-
-
-
+--@Net
 --netframework
 local netfw={}
 do
@@ -660,12 +712,7 @@ end
 
 
 
-
-
-
-
-
-
+--@Command
 --cprocessor
 local cpros={}
 do
@@ -926,16 +973,30 @@ do
 				
 				programs are .exe files in your bin folder, they are used
 				to carry out many tasks, programs can be ran by writing
-				PROGRAM_NAME.run into the console, example: chat.run will
-				start up chat
+				run [PROGRAM_NAME] into the console, example: chat.run will
+				run the chatsys program.
+
+				epsilon uses an efficient node tree system to handle
+				the execution of programs, different functions of a
+				program can be accessed along it's tree, example:
 				
+					chat>
+						>chat.info
+						>chat.join
+						>chat.send
+				
+				a running program will use up your RAM, this can lead
+				to the system running out of memory, to prevent this
+				the kill [PROGRAM_NAME] command may be used to stop
+				the program.
+						
 				/==========================================================/
 			]]
 			console.add(s)			
 		end,
 		help = function()
 			local s = [[
-				/==BASIC COMMANDS==/
+				/==BASIC COMMANDS==/														
 				/==========================================================/
 				connect [IP] --> connects to IP
 				dc --> disconnects from current network
@@ -1005,13 +1066,6 @@ end
 
 
 
-
-
-
-
-
-
-
 --@Chat
 --chatsystem
 local chatsys={}
@@ -1029,6 +1083,8 @@ do
 		end
 	end
 end
+
+
 
 
 
@@ -1113,18 +1169,8 @@ end
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-local mouse = game.Players.LocalPlayer:GetMouse()
+--@Console
+--Console
 local mousedown = false
 local typing = false
 inpserv.InputBegan:Connect(function(input,gp)
@@ -1147,6 +1193,24 @@ inpserv.InputEnded:Connect(function(input,gp)
 		mousedown = false		
 	end
 end)
+function consoleupdate()
+	root.terminal.topbar.Visible = not isplaying
+	root.terminal.topbar.bc.Text = game.Players.LocalPlayer.GameData.coins.Value .. " BitCredits"
+	if not root.terminal.input:IsFocused() and not mousedown or typing then
+		root.terminal.input:CaptureFocus()	
+	else
+		root.terminal.input:ReleaseFocus()				
+	end	
+	if tick()-t0 >= 0.1 then
+		if usc == "_" then
+			usc = ""
+		else
+			usc = "_"
+		end
+		t0 = tick()
+	end
+	root.terminal.console.text.Text = console:format()..">"..root.terminal.input.Text..usc
+end
 
 
 
@@ -1167,12 +1231,7 @@ end)
 
 
 
-
-
-
-
-
-
+--lonely line
 iplist()
 
 
@@ -1194,28 +1253,13 @@ iplist()
 
 
 
-
+--@Loop
 while game:GetService("RunService").RenderStepped:wait() do
 	if not booting then
 		dynmusic.update()
 		dynmusic.gameplay_update()
-		root.terminal.topbar.Visible = not isplaying
-		root.terminal.topbar.bc.Text = game.Players.LocalPlayer.GameData.coins.Value .. " BitCredits"
-		if not root.terminal.input:IsFocused() and not mousedown or typing then
-			root.terminal.input:CaptureFocus()	
-		else
-			root.terminal.input:ReleaseFocus()				
-		end	
-		if tick()-t0 >= 0.1 then
-			if usc == "_" then
-				usc = ""
-			else
-				usc = "_"
-			end
-			t0 = tick()
-		end
-		root.terminal.console.text.Text = console:format()..">"..root.terminal.input.Text..usc
 		fsys.update()
+		consoleupdate()
 		update_analysis()
 		update_website()
 		chatsys.update()
